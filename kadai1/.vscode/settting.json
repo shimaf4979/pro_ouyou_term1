@@ -1,0 +1,6 @@
+{
+    // ソースは src/ 下に配置
+    "java.project.sourcePaths": ["src"],
+    // JDBC ドライバを参照
+    "java.project.referencedLibraries": ["lib/**/*.jar"]
+  }
