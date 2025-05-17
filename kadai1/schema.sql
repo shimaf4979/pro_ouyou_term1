@@ -1,0 +1,41 @@
+-- schema.sql
+
+CREATE TABLE IF NOT EXISTS name (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS repository (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(owner_id) REFERENCES name(id)
+);
+
+CREATE TABLE IF NOT EXISTS branch (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    repository_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    head_commit_id INTEGER NULL,
+    FOREIGN KEY(repository_id) REFERENCES repository(id)
+);
+
+CREATE TABLE IF NOT EXISTS commit (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    branch_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    message TEXT NOT NULL,
+    parent_commit_id INTEGER NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(branch_id) REFERENCES branch(id),
+    FOREIGN KEY(author_id) REFERENCES name(id)
+);
+
+CREATE TABLE IF NOT EXISTS file (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    commit_id INTEGER NOT NULL,
+    filename TEXT NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY(commit_id) REFERENCES commit(id)
+);
